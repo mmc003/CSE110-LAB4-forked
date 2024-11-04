@@ -1,6 +1,6 @@
 import { useContext, useState , useEffect} from "react";
 import { AppContext } from "../../context/AppContext";
-import { fetchBudget } from "../../utils/budget-utils";
+import { fetchBudget, updateBudget } from "../../utils/budget-utils";
 
 const Budget = () => {
   const { budget, setBudget } = useContext(AppContext);
@@ -10,6 +10,10 @@ const Budget = () => {
   useEffect(() => {
     loadBudget();
   }, []);
+
+  useEffect(() => {
+    setNewBudget(budget);
+  }, [budget]);
 
   const loadBudget = async () => {
     try {
@@ -24,10 +28,15 @@ const Budget = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = (e: React.FormEvent) => {
+  const handleSaveClick = async (e: React.FormEvent) => {
     e.preventDefault();
-    setBudget(newBudget); 
-    setIsEditing(false);
+    try {
+      await updateBudget(newBudget);
+      setBudget(newBudget);
+      setIsEditing(false);
+    } catch (err: any) {
+      console.log(err.message);
+    }
   };
 
   return (
