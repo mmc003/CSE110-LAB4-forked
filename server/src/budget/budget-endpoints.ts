@@ -5,7 +5,7 @@ export function createBudgetEndpoints(app: any, budget: { amount: number }) {
     // Get the budget
     app.get("/budget", (req: Request, res: Response) => {
 
-        getBudget(res, budget.amount);
+        getBudget(res, budget);
 
     });
 
